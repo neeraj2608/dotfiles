@@ -14,16 +14,16 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Plugin 'dag/vim2hs'
-Plugin 'ujihisa/neco-ghc'
 Plugin 'scrooloose/syntastic'
 Plugin 'eagletmt/ghcmod-vim'
-Plugin 'godlygeek/tabular'
 Plugin 'Shougo/vimproc.vim'
-Plugin 'sirver/ultisnips'
-Plugin 'ervandew/screen'
 Plugin 'benmills/vimux'
-Bundle 'christoomey/vim-tmux-navigator'
+"Plugin 'dag/vim2hs'
+"Plugin 'ujihisa/neco-ghc'
+"Plugin 'godlygeek/tabular'
+"Plugin 'sirver/ultisnips'
+"Plugin 'ervandew/screen'
+"Bundle 'christoomey/vim-tmux-navigator'
 
 "-------------------------------------------------------------------------------
 " General options
