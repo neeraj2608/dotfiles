@@ -11,6 +11,7 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" Haskell goodies
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
@@ -18,30 +19,11 @@ Plugin 'scrooloose/syntastic'
 Plugin 'eagletmt/ghcmod-vim'
 Plugin 'Shougo/vimproc.vim'
 Plugin 'benmills/vimux'
-"Plugin 'dag/vim2hs'
-"Plugin 'ujihisa/neco-ghc'
-"Plugin 'godlygeek/tabular'
-"Plugin 'sirver/ultisnips'
-"Plugin 'ervandew/screen'
-"Bundle 'christoomey/vim-tmux-navigator'
 
 "-------------------------------------------------------------------------------
-" General options
-"-------------------------------------------------------------------------------
-se autochdir "current directory changes to that of file being edited
-se nowrap guioptions+=b "always show bottom scrollbar
-se nu "show line numbers
-se nobackup "don't create a backup file
-se backspace=2 "backspace always works like one
-se ic "ignore case
-se hls "highlight search term
-"Following line: Press Space to clear the current search highlights
-nnoremap <silent><Space> :nohlsearch<CR>
-"se cul "highlight current line
-
+" User Interface
 "-------------------------------------------------------------------------------
 " Maximize
-"-------------------------------------------------------------------------------
 if has("win32") "Maximize GVIM on Windows - Neeraj
   au GUIEnter * simalt ~x
   set guifont=Consolas:h14
@@ -49,9 +31,7 @@ else
   set guifont=Monospace\ 10
 endif
 
-"-------------------------------------------------------------------------------
 " Configure colors
-"-------------------------------------------------------------------------------
 if has("win32")
   if has("gui_running") "Gui color schemes
     if filereadable(expand('$VIMRUNTIME/colors/github.vim'))
@@ -82,10 +62,122 @@ else
   endif
 endif
 
+se autochdir "current directory changes to that of file being edited
+se nowrap guioptions+=b "always show bottom scrollbar
+se nu "show line numbers
+set backspace=eol,start,indent "backspace always works like one
+se ic "ignore case
+set smartcase
+se hls "highlight search term
+let mapleader = ","
+set nofoldenable
+set incsearch
+se ai "Auto indent
+se si "Smart indent
+
+" Press Space to clear the current search highlights
+nnoremap <silent><Space> :nohlsearch<CR>
+
+" Turn on the WiLd menu
+set wildmenu
+
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+
+" Move a line of text using ALT+[jk]
+nmap <M-j> mz:m+<cr>`z
+nmap <M-k> mz:m-2<cr>`z
+vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" For regular expressions turn magic on
+set magic
+
+" Use tabs for autocomplete
+function! Tab_Or_Complete()
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+:inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+
 "-------------------------------------------------------------------------------
-"Enable Java highlighting for standard classes
-"Assumes the files java.vim, javaid.vim, and html.vim are available in the syntax
-"folder
+" Navigation
+"-------------------------------------------------------------------------------
+" Navigate split windows
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Treat long lines as break lines (useful when moving around in them)
+map j gj
+map k gk
+
+"open split windows to the right and below
+set splitbelow
+set splitright
+
+" Configure window splitting
+se winminheight=0 "if 0, allows a split window to be minimized till only its statusline shows
+if version >= 700
+  """ The following two lines:
+  """ The first line uses self-destructive mapping to maximize a split window when it is opened
+  """ The second line returns i to its normal usage
+  au WinEnter    * nmap i :nunmap i<CR><C-W>_
+  au WinEnter    * normal i
+endif
+
+" Set 7 lines to the cursor - when moving vertically using j/k
+set so=7
+
+"-------------------------------------------------------------------------------
+" Files
+"-------------------------------------------------------------------------------
+se nobackup "don't create a backup file
+se nowb
+se noswapfile
+
+" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  %s/^\s\+$//ge
+  exe "normal `z"
+endfunc
+autocmd BufWrite * :call DeleteTrailingWS()
+
+" Restore to last location in file
+if has("autocmd") "Open file where you left off - Neeraj
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
+
+" Syntax highlighting for braces, operators and trailing whitespace
+syntax enable "syntax highlighting
+if has("gui_running")
+  if has("autocmd")
+    "highlight braces and braces in blue
+    au BufReadPost * syn match OpsBraces       /[\[\]{}()<>\.+=\*]/
+    au BufReadPost * hi OpsBraces       gui=bold               guifg=#1c7dd3
+    au BufReadPost * hi MatchParen      gui=bold guibg=#1c7dd3 guifg=#1a1414
+    "highlight trailing whitespace in red
+    au BufReadPost * syn match ExtraWhiteSpace /\s\+$/
+    au BufReadPost * hi ExtraWhiteSpace          guibg=#dc143c guifg=#dc143c
+    "highlight tabs in red
+    au BufReadPost * syn match Tabs /\t/
+    au BufReadPost * hi Tabs          guibg=#dc143c guifg=#dc143c
+  endif
+endif
+
+"-------------------------------------------------------------------------------
+" Enable Java highlighting for standard classes
+" Assumes the files java.vim, javaid.vim, and html.vim are available in the syntax
+" folder
 "-------------------------------------------------------------------------------
 if has("win32")
   if has("gui_running")
@@ -99,18 +191,6 @@ else
        let java_highlight_all=0
     endif
   endif
-endif
-
-"-------------------------------------------------------------------------------
-" Configure window splitting
-"-------------------------------------------------------------------------------
-se winminheight=0 "if 0, allows a split window to be minimized till only its statusline shows
-if version >= 700
-  """ The following two lines:
-  """ The first line uses self-destructive mapping to maximize a split window when it is opened
-  """ The second line returns i to its normal usage
-  au WinEnter    * nmap i :nunmap i<CR><C-W>_
-  au WinEnter    * normal i
 endif
 
 "-------------------------------------------------------------------------------
@@ -134,8 +214,9 @@ endif
 "    tabs after the first non-blank inserted as spaces if you do this
 "    though.  Otherwise aligned comments will be wrong when 'tabstop' is
 "    changed.
-se sw=4 "number of spaces for indent
+se shiftwidth=4 "number of spaces for indent
 se expandtab "replace tab by spaces
+se smarttab
 se tabstop=4
 
 "-------------------------------------------------------------------------------
@@ -153,32 +234,6 @@ inoremap <F8> <C-R>=strftime("%d %B %Y @ %H:%M %Z")<CR>
 map <F9> :w!<CR>:!python %<CR>
 map <F10> :InsFuncSnippet<CR>
 inoremap <F10> <Esc>:InsFuncSnippet<CR>a
-
-"-------------------------------------------------------------------------------
-" Restore to last location in file
-"-------------------------------------------------------------------------------
-if has("autocmd") "Open file where you left off - Neeraj
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-endif
-
-"-------------------------------------------------------------------------------
-" Syntax highlighting for braces, operators and trailing whitespace
-"-------------------------------------------------------------------------------
-syntax enable "syntax highlighting
-if has("gui_running")
-  if has("autocmd")
-    "highlight braces and braces in blue
-    au BufReadPost * syn match OpsBraces       /[\[\]{}()<>\.+=\*]/
-    au BufReadPost * hi OpsBraces       gui=bold               guifg=#1c7dd3
-    au BufReadPost * hi MatchParen      gui=bold guibg=#1c7dd3 guifg=#1a1414
-    "highlight trailing whitespace in red
-    au BufReadPost * syn match ExtraWhiteSpace /\s\+$/
-    au BufReadPost * hi ExtraWhiteSpace          guibg=#dc143c guifg=#dc143c
-    "highlight tabs in red
-    au BufReadPost * syn match Tabs /\t/
-    au BufReadPost * hi Tabs          guibg=#dc143c guifg=#dc143c
-  endif
-endif
 
 "-------------------------------------------------------------------------------
 " Handle plugins
@@ -283,7 +338,7 @@ if has("gui_running")
   set statusline=
   set statusline+=%1*\ %<%F%m%r%w\                          "File+path
   set statusline+=%2*\ %y\                                  "FileType
-  set statusline+=%4*\ %{&ff}\                              "FileFormat (dos/unix..) 
+  set statusline+=%4*\ %{&ff}\                              "FileFormat (dos/unix..)
   set statusline+=%8*\ %=\ row:%l/%L\ (%p%%)\               "Rownumber/total (%)
   set statusline+=%9*\ col:%03c\                            "Colnr
   set statusline+=%0*\ \ %P\ \                              "Modified? Readonly? Top/bot.
@@ -297,33 +352,19 @@ else
   set statusline=
   set statusline+=%0*\ %<%F%m%r%w\                          "File+path
   set statusline+=%0*\ %y\                                  "FileType
-  set statusline+=%0*\ %{&ff}\                              "FileFormat (dos/unix..) 
+  set statusline+=%0*\ %{&ff}\                              "FileFormat (dos/unix..)
   set statusline+=%0*\ %=\ row:%l/%L\ (%p%%)\               "Rownumber/total (%)
   set statusline+=%0*\ col:%03c\                            "Colnr
   set statusline+=%0*\ \ %P\ \                              "Modified? Readonly? Top/bot.
-  
+
   se laststatus=2 "always show statusline
   let g:activestatusline=&g:statusline
   if version >= 700
     au WinEnter    * let &l:statusline=g:activestatusline
   endif
 endif
-  
-"navigate split windows
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
-"open split windows to the right and below
-set splitbelow
-set splitright
-
-let mapleader = ","
-set nofoldenable
-
-set incsearch
-
+" Haskell goodies
 let g:syntastic_mode_map = { 'mode': 'passive',
                              \ 'active_filetypes': ['haskell'],
                              \ 'passive_filetypes': [''] }
