@@ -18,3 +18,4 @@ alias w='cd ~/workspace/haskell/haskell-sandbox'
 alias rr='rm -fr'
 alias python='python -B'
 alias p='python'
+alias ru='pkill -u 1000 vmtoolsd; vmtoolsd -n vmusr &' #restart unity
