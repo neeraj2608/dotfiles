@@ -174,6 +174,28 @@ if has("gui_running")
   endif
 endif
 
+" replace word under cursor with a user-prompted value
+function! ReplaceCurWord()
+    "make sure an undo will bring us back where we were
+    normal ix
+    normal x
+    let l:winview = winsaveview() "save cursor position
+    let wordUnderCursor = expand("<cword>")
+    call inputsave()
+    let replacement = input('Remplacer avec? ')
+    call inputrestore()
+    %call ReplaceWord(wordUnderCursor, replacement)
+    call winrestview(l:winview) "restore cursor position
+endfunction
+
+function! ReplaceWord(to_replace,replacement) range
+    for linenum in range(a:firstline, a:lastline)
+      let curr_line   = getline(linenum)
+      let replacement = substitute(curr_line,a:to_replace,a:replacement,'g')
+      call setline(linenum, replacement)
+    endfor
+endfunction
+
 "-------------------------------------------------------------------------------
 " Enable Java highlighting for standard classes
 " Assumes the files java.vim, javaid.vim, and html.vim are available in the syntax
@@ -230,10 +252,11 @@ map <F5> :e#<CR>
 map <F6> <C-W><C-W>
 map <F7> <C-W>_
 map <F8> "=strftime("%d %B %Y @ %H:%M %Z")<CR>p"<Esc>
-inoremap <F8> <C-R>=strftime("%d %B %Y @ %H:%M %Z")<CR>
 map <F9> :w!<CR>:!python %<CR>
 map <F10> :InsFuncSnippet<CR>
 inoremap <F10> <Esc>:InsFuncSnippet<CR>a
+map <C-R> :ReplaceCurWord<CR>
+command! -bar ReplaceCurWord call ReplaceCurWord()
 
 "-------------------------------------------------------------------------------
 " Handle plugins
