@@ -191,7 +191,7 @@ endfunction
 function! ReplaceWord(to_replace,replacement) range
     for linenum in range(a:firstline, a:lastline)
       let curr_line   = getline(linenum)
-      let replacement = substitute(curr_line,a:to_replace,a:replacement,'g')
+      let replacement = substitute(curr_line,join(['\<',a:to_replace,'\>'],''),a:replacement,'g')
       call setline(linenum, replacement)
     endfor
 endfunction
@@ -255,7 +255,7 @@ map <F8> "=strftime("%d %B %Y @ %H:%M %Z")<CR>p"<Esc>
 map <F9> :w!<CR>:!python %<CR>
 map <F10> :InsFuncSnippet<CR>
 inoremap <F10> <Esc>:InsFuncSnippet<CR>a
-map <C-R> :ReplaceCurWord<CR>
+map <M-r> :ReplaceCurWord<CR>
 command! -bar ReplaceCurWord call ReplaceCurWord()
 
 "-------------------------------------------------------------------------------
