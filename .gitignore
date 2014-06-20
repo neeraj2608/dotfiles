@@ -57,3 +57,7 @@ lint.xml
 *.o
 *.exe
 
+*.pyc
+flask/
+
+*egg-info
