@@ -28,34 +28,34 @@ if has("win32") "Maximize GVIM on Windows - Neeraj
   au GUIEnter * simalt ~x
   set guifont=Consolas:h14
 else
-  set guifont=Monospace\ 10
+  set guifont=Liberation\ Mono\ 10
 endif
 
 " Configure colors
 if has("win32")
   if has("gui_running") "Gui color schemes
-    if filereadable(expand('$VIMRUNTIME/colors/github.vim'))
-      color github
+    if filereadable(expand('$VIMRUNTIME/colors/hemisu.vim'))
+      color hemisu
     elseif filereadable(expand('$VIMRUNTIME/colors/neeraj.vim'))
       color neeraj
     elseif filereadable(expand('$VIMRUNTIME/colors/summerfruit256.vim'))
       color summerfruit256
     else
-      color github
+      color hemisu
     endif
   else "Console color schemes
     color zellner
   endif
 else
   if has("gui_running") "Gui color schemes
-    if filereadable(expand('$HOME/.vim/colors/github.vim'))
-      color github
+    if filereadable(expand('$HOME/.vim/colors/hemisu.vim'))
+      color hemisu
     elseif filereadable(expand('$HOME/.vim/colors/neeraj.vim'))
       color neeraj
     elseif filereadable(expand('$VIMRUNTIME/colors/summerfruit256.vim'))
       color summerfruit256
     else
-      color zellner
+      color hemisu
     endif
   else "Console color schemes
     color zellner
@@ -119,8 +119,8 @@ nnoremap <C-H> <C-W><C-H>
 map j gj
 map k gk
 
-"open split windows to the right and below
-set splitbelow
+"open split windows to the right and above
+set nosplitbelow
 set splitright
 
 " Configure window splitting
