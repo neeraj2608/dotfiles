@@ -34,6 +34,7 @@ alias python='python -B'
 alias p='python'
 alias ru='pkill -u 1000 vmtoolsd; vmtoolsd -n vmusr &' #restart unity
 alias t='tree'
+alias ta='sudo time-admin' #time and date dialog in xfce
 
 # Python
 export PYTHONSTARTUP='/home/neeraj/setuppythonenv.py'
