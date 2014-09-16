@@ -35,7 +35,7 @@ alias p='python'
 alias ru='pkill -u 1000 vmtoolsd; vmtoolsd -n vmusr &' #restart unity
 alias t='tree'
 alias ta='sudo time-admin' #time and date dialog in xfce
-alias r=' source .rvm/scripts/rvm && rvm use 1.8.7' # load ruby 1.8.7
+alias r=' source ~/.rvm/scripts/rvm && rvm use 1.8.7' # load ruby 1.8.7
 
 # Python
 export PYTHONSTARTUP='/home/neeraj/setuppythonenv.py'

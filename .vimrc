@@ -28,7 +28,7 @@ if has("win32") "Maximize GVIM on Windows - Neeraj
   au GUIEnter * simalt ~x
   set guifont=Consolas:h14
 else
-  set guifont=Liberation\ Mono\ 10
+  set guifont=Liberation\ Mono\ 11
 endif
 
 " Configure colors
@@ -153,12 +153,11 @@ endfunc
 autocmd BufWrite * :call DeleteTrailingWS()
 
 " Restore to last location in file
-if has("autocmd") "Open file where you left off - Neeraj
+if has("autocmd") "Open file where you left off
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 endif
 
 " Syntax highlighting for braces, operators and trailing whitespace
-syntax enable "syntax highlighting
 if has("gui_running")
   if has("autocmd")
     "highlight braces and braces in blue
@@ -170,9 +169,10 @@ if has("gui_running")
     au BufReadPost * hi ExtraWhiteSpace          guibg=#dc143c guifg=#dc143c
     "highlight tabs in red
     au BufReadPost * syn match Tabs /\t/
-    au BufReadPost * hi Tabs          guibg=#dc143c guifg=#dc143c
+    au BufReadPost * hi Tabs                     guibg=#dc143c guifg=#dc143c
   endif
 endif
+syntax enable "syntax highlighting
 
 " replace word under cursor with a user-prompted value
 function! ReplaceCurWord()
