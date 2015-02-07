@@ -20,14 +20,20 @@ alias ls='ls -Alp'
 alias l='ls -xpA --color=auto'
 alias h=history
 alias gas='git add -A; git status'
+alias gaus='git add -u; git status'
+alias gd='git diff'
+alias gb='git branch'
 alias gs='git status'
 alias gp='git push github `git rev-parse --abbrev-ref HEAD`'
 alias gh='git push heroku `git rev-parse --abbrev-ref HEAD`'
+alias gl='git log --decorate --graph --oneline'
 function gau(){
     git update-index --assume-unchanged $1
 }
 alias gl='git log'
-alias g='gvim'
+alias g='gvim >& /dev/null'
+alias gvim='gvim >& /dev/null'
+alias vim='gvim'
 alias w='cd ~/workspace/haskell/haskell-sandbox'
 alias rr='rm -fr'
 alias python='python -B'
@@ -36,6 +42,19 @@ alias ru='pkill -u 1000 vmtoolsd; vmtoolsd -n vmusr &' #restart unity
 alias t='tree'
 alias ta='sudo time-admin' #time and date dialog in xfce
 alias r=' source ~/.rvm/scripts/rvm && rvm use 1.8.7' # load ruby 1.8.7
+alias psme="ps -ef | grep $(whoami)"
+alias ps="ps -ef"
+
+# General
+shopt -s cdable_vars
+# note that ~ expansion does not work with cdable vars
+export ws="/home/neeraj/workspace/"
+export EDITOR="vim"
+
+# set terminal/iterm tab title
+function title {
+    echo -ne "\033]0;"$*"\007"
+}
 
 # Python
 export PYTHONSTARTUP='/home/neeraj/setuppythonenv.py'
@@ -52,6 +71,7 @@ fi
 export WORKON_HOME=~/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
 
+# Haskell
 # ghc-pkg-reset
 # Removes all installed GHC/cabal packages, but not binaries, docs, etc.
 # Use this to get out of dependency hell and start over, at the cost of some rebuilding time.

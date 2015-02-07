@@ -1,0 +1,25 @@
+[core]
+    editor = /usr/bin/vim
+[alias]
+    ci = commit
+    new = !sh -c 'git log $1@{1}..$1@{0} "$@"' # show new commits made by last command
+    whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -" # show current user
+    whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short # show last commit
+[user]
+    name = Raj Rao
+    email = neeraj2608@gmail.com
+[color]
+    ui = true
+[push]
+    default = current
+[diff]
+	tool = diffmerge
+[difftool "diffmerge"]
+	cmd = /Applications/DiffMerge.app/Contents/MacOS/diffmerge $LOCAL $REMOTE
+[merge]
+	tool = diffmerge
+[mergetool "diffmerge"]
+	cmd = /Applications/DiffMerge.app/Contents/MacOS/diffmerge --merge --result=$MERGED $LOCAL $BASE $REMOTE
+	trustExitCode = true
+[mergetool]
+	keepBackup = false
